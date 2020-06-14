@@ -418,9 +418,11 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 					m_LogFile << "[                   ] Version: " << CStringA(GetFileVersion(filename)).GetString() << " Built: " __DATE__ " at " __TIME__ << std::endl;
 					m_LogFile << "[                   ] Command: ";
 					for (auto index = 0; index < argc; index++) m_LogFile << QuoteFileName(argv[index]).GetString() << " "; m_LogFile << std::endl;
-					m_LogFile << "[" << getTimeISO8601() << "] " << "First File: " << SourceVideoList.front().GetString() << std::endl;
-					m_LogFile << "[" << getTimeISO8601() << "] " << "Last File:  " << SourceVideoList.back().GetString() << std::endl;
 					m_LogFile << "[" << getTimeISO8601() << "] " << "Total Files: " << SourceVideoList.size() << std::endl;
+					m_LogFile << "[" << getTimeISO8601() << "] " << "  File List:";
+					for (auto SourceFile = SourceVideoList.begin(); SourceFile != SourceVideoList.end(); SourceFile++)
+						m_LogFile << " " << SourceFile->GetString();
+					m_LogFile << std::endl;
 					m_LogFile.close();
 				}
 
@@ -486,14 +488,6 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 								mycommand.push_back(QuoteFileName(csVideoName).GetString());
 								std::wcout << "[" << getTimeISO8601() << "]";
 
-								m_LogFile.open(GetLogFileName().GetString(), std::ios_base::out | std::ios_base::app | std::ios_base::ate);
-								if (m_LogFile.is_open())
-								{
-									m_LogFile << "[" << getTimeISO8601() << "] " << "First File:  " << SourceVideoList.front().GetString() << std::endl;
-									m_LogFile << "[" << getTimeISO8601() << "] " << "Last File:   " << SourceVideoList.back().GetString() << std::endl;
-									m_LogFile << "[" << getTimeISO8601() << "] " << "Total Files: " << SourceVideoList.size() << std::endl;
-									m_LogFile << "[" << getTimeISO8601() << "]";
-								}
 								for (auto arg = mycommand.begin(); arg != mycommand.end(); arg++)
 								{
 									std::wcout << " " << *arg;
@@ -625,6 +619,12 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 							}
 						}
 					}
+				}
+				m_LogFile.open(GetLogFileName().GetString(), std::ios_base::out | std::ios_base::app | std::ios_base::ate);
+				if (m_LogFile.is_open())
+				{
+					m_LogFile << "[" << getTimeISO8601() << "] LogFile Closed" << std::endl;
+					m_LogFile.close();
 				}
 			}
         }

@@ -487,7 +487,9 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 #endif
 								mycommand.push_back(QuoteFileName(csVideoName).GetString());
 								std::wcout << "[" << getTimeISO8601() << "]";
-
+								m_LogFile.open(GetLogFileName().GetString(), std::ios_base::out | std::ios_base::app | std::ios_base::ate);
+								if (m_LogFile.is_open())
+									m_LogFile << "[" << getTimeISO8601() << "]";
 								for (auto arg = mycommand.begin(); arg != mycommand.end(); arg++)
 								{
 									std::wcout << " " << *arg;

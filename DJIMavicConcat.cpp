@@ -480,6 +480,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 								mycommand.push_back(_T("-map")); mycommand.push_back(_T("1"));
 								mycommand.push_back(_T("-c:v")); mycommand.push_back(_T("copy"));
 								mycommand.push_back(_T("-c:s")); mycommand.push_back(_T("copy"));
+								mycommand.push_back(_T("-movflags")); mycommand.push_back(_T("+faststart"));
 #ifndef _DEBUG
 								mycommand.push_back(_T("-n"));
 #else

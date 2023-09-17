@@ -337,7 +337,62 @@ const CString GetLogFileName()
 	}
 	return(csLogFileName);
 }
-
+/////////////////////////////////////////////////////////////////////////////
+int SimplifyDJISRT(std::filesystem::path& filename,
+	const bool datetime = true,
+	const bool latitude = true,
+	const bool longitude = true,
+	const bool altitude = true,
+	const bool font=false,
+	const bool srtcnt=false,
+	const bool difftime=false,
+	const bool iso=false,
+	const bool shutter=false,
+	const bool fnum=false,
+	const bool ev=false,
+	const bool ct=false,
+	const bool color_md=false)
+{
+	int rVal = 0;	// zero is a good result, anything else means some error happened
+	std::filesystem::path simplefilename(filename);
+	filename.extension() = "bak";
+	try
+	{
+		std::filesystem::rename(simplefilename, filename);
+		std::cerr << "[                   ] Renamed " << simplefilename << " to " << filename << std::endl;
+	}
+	catch (const std::filesystem::filesystem_error& ia)
+	{
+		std::cerr << "[                   ] " << ia.what() << std::endl;
+		std::cerr << "[                   ] Unable to Rename " << simplefilename << " to " << filename << std::endl;
+		rVal++;
+	}
+	std::ifstream TheInFile(filename);
+	if (TheInFile.is_open())
+	{
+		std::ofstream TheOutFile(simplefilename);
+		if (TheOutFile.is_open())
+		{
+			std::wcout << "[" << getTimeISO8601() << "] Reading: " << filename;
+			std::string TheLine;
+			do {
+				std::getline(TheInFile, TheLine);
+				int SRTIndex(std::stoi(TheLine));
+				std::getline(TheInFile, TheLine);
+				std::string SRTTime(TheLine);
+				std::getline(TheInFile, TheLine);
+				std::string SRTFontLine(TheLine);
+				std::getline(TheInFile, TheLine);
+				std::string SRTUTCLine(TheLine);
+				std::getline(TheInFile, TheLine);
+				std::string SRTDataLine(TheLine);
+				std::getline(TheInFile, TheLine); // blank line ending srt entry
+			} while (!TheInFile.eof());
+		}
+	}
+	return(rVal);
+}
+/////////////////////////////////////////////////////////////////////////////
 int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 {
     int nRetCode = 0;

@@ -14,9 +14,11 @@
 #include <locale>       // std::locale
 #include <vector>
 #include <algorithm>
-
+#include <cstring>
+#include <ctime>
 #include <locale>
 #include <iomanip>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 
